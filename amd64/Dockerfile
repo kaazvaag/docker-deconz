@@ -51,4 +51,16 @@ VOLUME [ "/root/.local/share/dresden-elektronik/deCONZ" ]
 
 EXPOSE ${DECONZ_WEB_PORT} ${DECONZ_WS_PORT}
 
+# Install vnc, xvfb in order to create a 'fake' display
+RUN apt-get update && \
+    apt-get install -y x11vnc xvfb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir ~/.vnc && \
+    touch ~/.vnc/passwd
+
+RUN x11vnc -storepasswd "delight" ~/.vnc/passwd
+
+EXPOSE 5900
+
 ENTRYPOINT [ "/tini", "--", "/start.sh" ]

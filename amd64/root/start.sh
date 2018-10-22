@@ -5,9 +5,13 @@ echo "[marthoc/deconz] Current deCONZ version: $DECONZ_VERSION"
 echo "[marthoc/deconz] Web UI port: $DECONZ_WEB_PORT"
 echo "[marthoc/deconz] Websockets port: $DECONZ_WS_PORT"
 
+export DISPLAY=:0
+rm /tmp/.X0-lock
+Xvfb :0 -screen 0 1280x720x16 &
+x11vnc -display :0 -usepw -forever &
+
 if [ "$DECONZ_DEVICE" != 0 ]; then
     /usr/bin/deCONZ \
-        -platform minimal \
         --auto-connect=1 \
         --dbg-info=$DEBUG_INFO \
         --dbg-aps=$DEBUG_APS \
@@ -19,7 +23,6 @@ if [ "$DECONZ_DEVICE" != 0 ]; then
         --dev=$DECONZ_DEVICE
 else
     /usr/bin/deCONZ \
-        -platform minimal \
         --auto-connect=1 \
         --dbg-info=$DEBUG_INFO \
         --dbg-aps=$DEBUG_APS \
