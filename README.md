@@ -1,12 +1,12 @@
-## deCONZ Docker Image
+## deCONZ with gui Docker Image
 
-[![Build Status](https://travis-ci.org/marthoc/docker-deconz.svg?branch=master)](https://travis-ci.org/marthoc/docker-deconz)
+[![Build Status](https://travis-ci.org/kaazvaag/docker-deconz.svg?branch=master)](https://travis-ci.org/kaazvaag/docker-deconz)
 
-This Docker image containerizes the deCONZ software from Dresden Elektronik, which controls a ZigBee network using a Conbee USB or RaspBee GPIO serial interface. This image runs deCONZ in "minimal" mode, for control of the ZigBee network via the WebUIs ("Wireless Light Control" and "Phoscon") and over the REST API and Websockets.
+This Docker image containerizes the deCONZ software from Dresden Elektronik, which controls a ZigBee network using a Conbee USB or RaspBee GPIO serial interface. This image runs deCONZ in "gui" mode, for control of the ZigBee network via the WebUIs ("Wireless Light Control" and "Phoscon") and over the REST API and Websockets. Also you can use the deconz gui when connecting with a VNC client to the docker on port 5900.
 
 Conbee is supported on `amd64` and `armhf` (i.e. RaspberryPi 2/3) architectures; RaspBee is supported on `armhf` (and see the "Configuring Raspbian for RaspBee" section below for instructions to configure Raspbian to allow access to the RaspBee serial hardware).
 
-This image is available on (and should be pulled from) Docker Hub: `marthoc/deconz`.
+This image is available on (and should be pulled from) Docker Hub: `kaazvaag/deconz`.
 
 Current deCONZ version: **2.05.42**
 
@@ -15,14 +15,18 @@ Current deCONZ version: **2.05.42**
 #### Command Line
 
 ```bash
-docker run -d \
-    --name=deconz \
+sudo docker run -d \
+    --name=deconz-gui \
     --net=host \
-    --restart=always \
-    --/etc/localtime:/etc/localtime:ro \
-    -v /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ \
+	--restart=always \
+	-p 5900:5900 \
+    -v /volume1/docker/deconz:/root/.local/share/dresden-elektronik/deCONZ \
+	-v /volume1/docker/deconz/tmp:/tmp \
     --device=/dev/ttyUSB0 \
-    marthoc/deconz
+	-v /etc/localtime:/etc/localtime:ro \
+	-e DECONZ_WEB_PORT=8091 \
+	-e DECONZ_WS_PORT=8445 \
+    kaazvaag/deconz:latest
 ```
 
 #### Command line Options
@@ -35,7 +39,7 @@ docker run -d \
 |`-v /etc/localtime:/etc/localtime:ro`|Ensure the container has the correct local time (alternatively, use the TZ environment variable, see below).|
 |`-v /opt/deconz:/root/.local/share/dresden-elektronik/deCONZ`|Bind mount /opt/deconz (or the directory of your choice) into the container for persistent storage.|
 |`--device=/dev/ttyUSB0`|Pass the serial device at ttyUSB0 (i.e. a Conbee USB device) into the container for use by deCONZ (if using RaspBee, use /dev/ttyAMA0).|
-|`marthoc/deconz`|This image uses a manifest list for multiarch support; specifying marthoc/deconz (i.e. marthoc/deconz:latest) will pull the correct version for your arch.|
+|`kaazvaag/deconz`|This image uses a manifest list for multiarch support; specifying kaazvaag/deconz (i.e. kaazvaag/deconz:latest) will pull the correct version for your arch.|
 
 #### Environment Variables
 
@@ -61,8 +65,8 @@ A docker-compose.yml file is provided in the root of this image's GitHub repo. Y
 version: "2"
 services:
   deconz:
-    image: marthoc/deconz
-    container_name: deconz
+    image: kaazvaag/deconz
+    container_name: deconz-gui
     network_mode: host
     restart: always
     volumes:
@@ -79,7 +83,7 @@ services:
       - DEBUG_OTAU=0
 ```
 
-Then, you can do `docker-compose pull` to pull the latest marthoc/deconz image, `docker-compose up -d` to start the deconz container service, and `docker-compose down` to stop the deconz service and delete the container. Note that these commands will also pull, start, and stop any other services defined in docker-compose.yml.
+Then, you can do `docker-compose pull` to pull the latest kaazvaag/deconz image, `docker-compose up -d` to start the deconz container service, and `docker-compose down` to stop the deconz service and delete the container. Note that these commands will also pull, start, and stop any other services defined in docker-compose.yml.
 
 #### Running on Docker for Mac / Docker for Windows
 
@@ -87,7 +91,7 @@ The `--net=host` option is not yet supported on Mac/Windows. To run this contain
 
 ```bash
 docker run -d \
-    --name=deconz \
+    --name=deconz-gui \
     -p 80:80 \
     -p 443:443 \
     --restart=always \
@@ -95,7 +99,7 @@ docker run -d \
     --device=/dev/ttyUSB0 \
     -e DECONZ_WEB_PORT=80 \
     -e DECONZ_WS_PORT=443 \
-    marthoc/deconz
+    kaazvaag/deconz
 ```
 
 ### Configuring Raspbian for RaspBee
@@ -124,7 +128,7 @@ GW firmware version shall be updated to: 0x261e0500
 
 2. `docker stop [container name]` or `docker-compose down` to stop your running deCONZ container (you must do this or the firmware update will fail).
 
-3. Invoke the firmware update script: `docker run -it --rm --entrypoint "/firmware-update.sh" --privileged --cap-add=ALL -v /dev:/dev -v /lib/modules:/lib/modules -v /sys:/sys marthoc/deconz`
+3. Invoke the firmware update script: `docker run -it --rm --entrypoint "/firmware-update.sh" --privileged --cap-add=ALL -v /dev:/dev -v /lib/modules:/lib/modules -v /sys:/sys kaazvaag/deconz`
 
 4. Follow the prompts:
 - Enter C for Conbee, or R for RaspBee.
@@ -148,16 +152,16 @@ Over-the-air update functionality is currently untested.
 
 ### Issues / Contributing
 
-Please raise any issues with this container at its GitHub repo: https://github.com/marthoc/docker-deconz. Please check the "Gotchas / Known Issues" section above before raising an Issue on GitHub in case the issue is already known.
+Please raise any issues with this container at its GitHub repo: https://github.com/kaazvaag/docker-deconz. Please check the "Gotchas / Known Issues" section above before raising an Issue on GitHub in case the issue is already known.
 
 To contribute, please fork the GitHub repo, create a feature branch, and raise a Pull Request; for simple changes/fixes, it may be more effective to raise an Issue instead.
 
 ### Building Locally
 
-Pulling `marthoc/deconz` from Docker Hub is the recommended way to obtain this image. However, you can build this image locally by:
+Pulling `kaazvaag/deconz` from Docker Hub is the recommended way to obtain this image. However, you can build this image locally by:
 
 ```bash
-git clone https://github.com/marthoc/docker-deconz.git
+git clone https://github.com/kaazvaag/docker-deconz.git
 cd docker-deconz
 docker build -t "[your-user/]deconz[:local]" ./[arch]
 ```
@@ -174,3 +178,4 @@ docker build -t "[your-user/]deconz[:local]" ./[arch]
 Dresden Elektronik for making deCONZ and the Conbee and RaspBee hardware.
 
 @krallin for his "tini" container init process: https://github.com/krallin/tini.
+@Marthoc for doing all the hard work at creating the docker-deconz https://github.com/marthoc/docker-deconz

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-echo "[marthoc/deconz] Starting deCONZ..."
-echo "[marthoc/deconz] Current deCONZ version: $DECONZ_VERSION"
-echo "[marthoc/deconz] Web UI port: $DECONZ_WEB_PORT"
-echo "[marthoc/deconz] Websockets port: $DECONZ_WS_PORT"
+echo "[kaazvaag/deconz] Starting deCONZ..."
+echo "[kaazvaag/deconz] Current deCONZ version: $DECONZ_VERSION"
+echo "[kaazvaag/deconz] Web UI port: $DECONZ_WEB_PORT"
+echo "[kaazvaag/deconz] Websockets port: $DECONZ_WS_PORT"
 
 export DISPLAY=:0
 rm /tmp/.X0-lock
