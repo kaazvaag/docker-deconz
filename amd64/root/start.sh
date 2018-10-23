@@ -20,7 +20,8 @@ if [ "$DECONZ_DEVICE" != 0 ]; then
         --dbg-otau=$DEBUG_OTAU \
         --http-port=$DECONZ_WEB_PORT \
         --ws-port=$DECONZ_WS_PORT \
-        --dev=$DECONZ_DEVICE
+        --dev=$DECONZ_DEVICE \
+        --upnp=$DECONZ_UPNP
 else
     /usr/bin/deCONZ \
         --auto-connect=1 \
@@ -30,5 +31,6 @@ else
         --dbg-zdp=$DEBUG_ZDP \
         --dbg-otau=$DEBUG_OTAU \
         --http-port=$DECONZ_WEB_PORT \
-        --ws-port=$DECONZ_WS_PORT
+        --ws-port=$DECONZ_WS_PORT \
+        --upnp=$DECONZ_UPNP
 fi

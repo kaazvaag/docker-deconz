@@ -12,7 +12,8 @@ ENV DECONZ_WEB_PORT=80 \
     DEBUG_ZCL=0 \
     DEBUG_ZDP=0 \
     DEBUG_OTAU=0 \
-    DECONZ_DEVICE=0
+    DECONZ_DEVICE=0 \
+    DECONZ_UPNP=1
 
 # Install deCONZ dependencies
 RUN apt-get update && \
