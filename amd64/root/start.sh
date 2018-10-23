@@ -7,7 +7,7 @@ echo "[kaazvaag/deconz] Websockets port: $DECONZ_WS_PORT"
 
 export DISPLAY=:0
 rm /tmp/.X0-lock
-Xvfb :0 -screen 0 1280x720x16 &
+Xvfb :0 -screen 0 1920x1080x16 &
 x11vnc -display :0 -usepw -forever &
 
 if [ "$DECONZ_DEVICE" != 0 ]; then
