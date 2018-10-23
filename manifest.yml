@@ -1,13 +1,7 @@
-image: marthoc/deconz:latest
+image: kaazvaag/deconz:latest
 manifests:
   -
-    image: marthoc/deconz:amd64
+    image: kaazvaag/deconz:amd64
     platform:
       architecture: amd64
-      os: linux
-  -
-    image: marthoc/deconz:armhf
-    platform:
-      architecture: arm
-      variant: armv7l
       os: linux
