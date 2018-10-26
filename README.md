@@ -1,5 +1,7 @@
 ## deCONZ with gui Docker Image
 
+[![Build Status](https://travis-ci.org/kaazvaag/docker-deconz.svg?branch=master)](https://travis-ci.org/kaazvaag/docker-deconz)
+
 This Docker image containerizes the deCONZ software from Dresden Elektronik, which controls a ZigBee network using a Conbee USB or RaspBee GPIO serial interface. This image runs deCONZ in "gui" mode, for control of the ZigBee network via the WebUIs ("Wireless Light Control" and "Phoscon") and over the REST API and Websockets. Also you can use the deconz gui when connecting with a VNC client to the docker on port 5900.
 
 Conbee is supported on `amd64` and `armhf` (i.e. RaspberryPi 2/3) architectures; RaspBee is supported on `armhf` (and see the "Configuring Raspbian for RaspBee" section below for instructions to configure Raspbian to allow access to the RaspBee serial hardware).
