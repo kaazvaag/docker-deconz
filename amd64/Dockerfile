@@ -18,7 +18,9 @@ ENV DECONZ_WEB_PORT=80 \
 # Install deCONZ dependencies
 RUN apt-get update && \
     apt-get install -y \
-        curl \
+        apt-utils \
+		lsof \
+		curl \
         jq \
         kmod \
         libcap2-bin \
